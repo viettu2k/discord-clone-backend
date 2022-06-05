@@ -8,3 +8,5 @@ const newConnectionHandler = async(socket, _) => {
         userId: userDetails.userId,
     });
 };
+
+module.exports = { newConnectionHandler };
