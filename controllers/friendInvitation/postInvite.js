@@ -1,4 +1,5 @@
 const User = require('../../models/user');
+const FriendInvitation = require('../../models/friendInvitation');
 
 const postInvite = async(req, res) => {
     const { targetMailAddress } = req.body;
@@ -23,7 +24,7 @@ const postInvite = async(req, res) => {
     }
 
     // check if invitation has been already found
-    const invitationAlreadyReceived = await Invitation.findOne({
+    const invitationAlreadyReceived = await FriendInvitation.findOne({
         senderId: userId,
         receiverId: targetUser._id,
     });
@@ -45,8 +46,13 @@ const postInvite = async(req, res) => {
     }
 
     // create new invitation in database
+    const newInvitation = await FriendInvitation.create({
+        senderId: userId,
+        receiverId: targetUser._id,
+    });
 
-    return res.send('request passed');
+    // if invitation has been successfully created we would like to update friends invitations
+    return res.status(201).send('Invitation has been sent.');
 };
 
 module.exports = postInvite;
