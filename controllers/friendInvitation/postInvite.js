@@ -23,6 +23,28 @@ const postInvite = async(req, res) => {
     }
 
     // check if invitation has been already found
+    const invitationAlreadyReceived = await Invitation.findOne({
+        senderId: userId,
+        receiverId: targetUser._id,
+    });
+
+    if (invitationAlreadyReceived) {
+        return res
+            .status(409)
+            .send(`You have already sent invitation to ${targetMailAddress}.`);
+    }
+
+    // check if the user which we would like to invite is already our friend
+    const usersAlreadyFriends = targetUser.friends.find(
+        (friendId) => friendId.toString() === userId.toString()
+    );
+    if (usersAlreadyFriends) {
+        return res
+            .status(409)
+            .send(`Friend already added. Please check friends list.`);
+    }
+
+    // create new invitation in database
 
     return res.send('request passed');
 };
