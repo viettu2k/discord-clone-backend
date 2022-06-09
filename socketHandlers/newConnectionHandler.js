@@ -1,4 +1,5 @@
 const serverStore = require('../serverStore');
+const friendsUpdate = require('../socketHandlers/updates/friends');
 
 const newConnectionHandler = async(socket, _) => {
     const userDetails = socket.user;
