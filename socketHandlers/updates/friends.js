@@ -8,8 +8,19 @@ const updateFriendsPendingInvitations = async(userId) => {
             receiverId: userId,
         }).populate('senderId', '_id username mail');
 
-        // find if user of specified userId has active
+        // find all active connections of specific user
+        const receiverList = serverStore.getActiveConnections(userId);
+
+        const io = serverStore.getSocketServerInstance();
+
+        receiverList.forEach((receiverSocketId) => {
+            io.to(receiverSocketId).emit('friend-invitation', {
+                pendingInvitations: pendingInvitations ? pendingInvitations : [],
+            });
+        });
     } catch (err) {
         console.log(err);
     }
 };
+
+module.exports = { updateFriendsPendingInvitations };

@@ -1,5 +1,15 @@
 const connectedUsers = new Map();
 
+let io = null;
+
+const setSocketSeverInstance = (ioInstance) => {
+    io = ioInstance;
+};
+
+const getSocketServerInstance = () => {
+    return io;
+};
+
 const addNewConnectedUser = ({ socketId, userId }) => {
     connectedUsers.set(socketId, { userId });
     console.log('new connected user');
@@ -13,7 +23,22 @@ const removeConnectedUser = ({ socketId }) => {
     }
 };
 
+const getActiveConnections = (userId) => {
+    const activeConnections = [];
+
+    connectedUsers.forEach(function(key, value) {
+        if (value.userId === userId) {
+            activeConnections.push(key);
+        }
+    });
+
+    return activeConnections;
+};
+
 module.exports = {
     addNewConnectedUser,
     removeConnectedUser,
+    getActiveConnections,
+    setSocketSeverInstance,
+    getSocketServerInstance,
 };
