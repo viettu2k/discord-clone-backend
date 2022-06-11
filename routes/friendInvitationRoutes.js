@@ -9,7 +9,7 @@ const postFriendInvitationSchema = Joi.object({
     targetMailAddress: Joi.string().email().required(),
 });
 
-const inviteDecisionsSchema = Joi.object({
+const inviteDecisionSchema = Joi.object({
     id: Joi.string().required(),
 });
 
@@ -23,14 +23,14 @@ router.post(
 router.post(
     '/accept',
     auth,
-    validator.body(inviteDecisionsSchema),
+    validator.body(inviteDecisionSchema),
     friendInvitationControllers.controllers.postAccept
 );
 
 router.post(
     '/reject',
     auth,
-    validator.body(inviteDecisionsSchema),
+    validator.body(inviteDecisionSchema),
     friendInvitationControllers.controllers.postReject
 );
 

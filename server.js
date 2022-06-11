@@ -2,7 +2,6 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const morgan = require('morgan');
 require('dotenv').config();
 
 const socketServer = require('./socketServer');
@@ -12,7 +11,6 @@ const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
 const PORT = process.env.PORT || process.env.API_PORT;
 
 const app = express();
-app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());
 
@@ -31,5 +29,6 @@ mongoose
         });
     })
     .catch((err) => {
-        console.log('Database connection failed. Server not started');
+        console.log('database connection failed. Server not started');
+        console.error(err);
     });

@@ -8,13 +8,13 @@ const updateFriendsPendingInvitations = async(userId) => {
             receiverId: userId,
         }).populate('senderId', '_id username mail');
 
-        // find all active connections of specific user
+        // find all active connections of specific userId
         const receiverList = serverStore.getActiveConnections(userId);
 
         const io = serverStore.getSocketServerInstance();
 
         receiverList.forEach((receiverSocketId) => {
-            io.to(receiverSocketId).emit('friend-invitation', {
+            io.to(receiverSocketId).emit('friends-invitations', {
                 pendingInvitations: pendingInvitations ? pendingInvitations : [],
             });
         });
@@ -25,7 +25,7 @@ const updateFriendsPendingInvitations = async(userId) => {
 
 const updateFriends = async(userId) => {
     try {
-        // find active connections of specific id (online user)
+        // find active connections of specific id (online users)
         const receiverList = serverStore.getActiveConnections(userId);
 
         if (receiverList.length > 0) {
@@ -33,6 +33,7 @@ const updateFriends = async(userId) => {
                 'friends',
                 '_id username mail'
             );
+
             if (user) {
                 const friendsList = user.friends.map((f) => {
                     return {
@@ -41,6 +42,7 @@ const updateFriends = async(userId) => {
                         username: f.username,
                     };
                 });
+
                 // get io server instance
                 const io = serverStore.getSocketServerInstance();
 
@@ -51,9 +53,12 @@ const updateFriends = async(userId) => {
                 });
             }
         }
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        console.log(err);
     }
 };
 
-module.exports = { updateFriendsPendingInvitations, updateFriends };
+module.exports = {
+    updateFriendsPendingInvitations,
+    updateFriends,
+};
