@@ -18,7 +18,6 @@ const postReject = async(req, res) => {
 
         return res.status(200).send('Invitation successfully rejected');
     } catch (err) {
-        console.log(err);
         return res.status(500).send('Something went wrong please try again');
     }
 };
