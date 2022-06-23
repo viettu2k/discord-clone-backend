@@ -1,6 +1,6 @@
-const User = require("../../models/user");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const User = require('../../models/user');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const postRegister = async(req, res) => {
     try {
@@ -10,7 +10,7 @@ const postRegister = async(req, res) => {
         const userExits = await User.exists({ mail: mail.toLowerCase() });
 
         if (userExits) {
-            return res.status(409).send("E-mail already in use.");
+            return res.status(409).send('E-mail already in use.');
         }
 
         // encrypt password
@@ -29,15 +29,20 @@ const postRegister = async(req, res) => {
                 mail,
             },
             process.env.TOKEN_KEY, {
-                expiresIn: "24h",
+                expiresIn: '24h',
             }
         );
 
         res.status(201).json({
-            userDetails: { mail: user.mail, token: token, user: user.name },
+            userDetails: {
+                mail: user.mail,
+                token: token,
+                username: user.username,
+                _id: user._id,
+            },
         });
     } catch (err) {
-        return res.status(500).send("Error occurred. Please try again");
+        return res.status(500).send('Error occurred. Please try again');
     }
 };
 module.exports = postRegister;
