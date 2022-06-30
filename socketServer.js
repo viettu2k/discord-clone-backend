@@ -44,7 +44,7 @@ const registerSocketServer = (server) => {
         });
 
         socket.on('room-join', (data) => {
-            roomJoinHandler();
+            roomJoinHandler(data);
         });
 
         socket.on('disconnect', () => {
